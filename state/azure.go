@@ -92,7 +92,7 @@ func (a Azure) GetStates() (states []string, err error) {
 		handleError(err)
 
 		for _, blob := range resp.Segment.BlobItems {
-			if *blob.Properties.ContentType == "text/plain" && strings.Contains(*blob.Name, ".tfstate") {  {
+			if *blob.Properties.ContentType == "text/plain" && strings.Contains(*blob.Name, ".tfstate") {
 				keys = append(keys, *blob.Name)
 			}
 		}
