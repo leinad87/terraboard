@@ -3,12 +3,15 @@ package state
 import (
 	"context"
 	"fmt"
+	"strings"
+
+	"time"
+
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob"
 	"github.com/camptocamp/terraboard/config"
 	"github.com/camptocamp/terraboard/internal/terraform/states/statefile"
 	log "github.com/sirupsen/logrus"
-	"time"
 )
 
 // Azure is a state provider type, leveraging S3 and DynamoDB
@@ -89,7 +92,7 @@ func (a Azure) GetStates() (states []string, err error) {
 		handleError(err)
 
 		for _, blob := range resp.Segment.BlobItems {
-			if *blob.Properties.ContentType == "application/json" {
+			if *blob.Properties.ContentType == "text/plain" && strings.Contains(*blob.Name, ".tfstate") {
 				keys = append(keys, *blob.Name)
 			}
 		}
